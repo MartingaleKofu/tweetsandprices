@@ -8,6 +8,6 @@ To scrape twitter data I used twitterscraper (https://github.com/taspinar/twitte
 and to scrape Bitcoin News I used BeautifulSoup4 and then parsed the data with 
 Natural Language Toolkit (NLTK)
 
-After installing twitterscraper, I use this command to scrape roughly 50,000 
+After installing twitterscraper, I use this command to scrape roughly 6000
 tweets between December 8th, 2017 and February 6th, 2018:
-twitterscraper -bd 2017-12-08 -ed 2018-02-06 "Bitcoin OR BTC" -o bitcoin_tweets.json -l 50000
+twitterscraper -bd 2018-01-31 -ed 2018-02-06 "Bitcoin OR BTC" -o bitcoin_tweets.json -l 20000
