@@ -10,6 +10,7 @@ import numpy as np
 
 def extract_text(tweets):
     df = pd.read_json(tweets)
-    df.drop(['user','id','likes','replies','retweets','fullname','url'])
+    df['date'] = df['timestamp'].apply(lambda x: x.date())
+    df = df.drop(['fullname','id','likes','replies','retweets','url','user', 'timestamp'], axis=1)
     
-    print(df)
+    return df
