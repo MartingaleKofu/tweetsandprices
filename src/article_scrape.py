@@ -43,7 +43,7 @@ def crawl_articles(url):
     soup = BeautifulSoup(opener.open(url), 'html.parser')
     
     links = []  # list of url's in string
-    for link in soup.find_all('a', href=re.compile('http'), rel='bookmark'):
+    for link in soup.find_all('a', href=True, rel='bookmark'):
         if (link['title'] == link.get_text()):
             links.append(link['href'])
     
