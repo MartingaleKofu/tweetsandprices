@@ -46,16 +46,24 @@ def crawl_articles(url):
     for link in soup.find_all('a', href=re.compile('http'), rel='bookmark'):
         if (link['title'] == link.get_text()):
             links.append(link['href'])
-    
+    print(links)
     return links
 
 def find_date(url):
     opener = request.build_opener()
     opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
     soup = BeautifulSoup(opener.open(url), 'html.parser')
-    
     strtime = soup.time.attrs['datetime']
     strtime = strtime[:10]
     date = datetime.datetime.strptime(strtime, "%Y-%m-%d").date()
-    
+
     return date
+
+def num_pages(url):
+    opener = request.build_opener()
+    opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
+    soup = BeautifulSoup(opener.open(url), 'html.parser')
+    words = soup.find_all('span', attrs={"class":"pages"})[0].get_text().split(' ')
+    numpages = int(words[-1])
+    
+    return numpages
