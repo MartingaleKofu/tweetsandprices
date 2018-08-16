@@ -6,13 +6,14 @@ Created on Tue Feb  6 19:49:41 2018
 """
 
 import datetime
-import tweet_tle
 import article_scrape
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 bitcoin_tweets_path = '../include/bitcoin_tweets.json'
 crawl_url = 'https://news.bitcoin.com/page/' 
+btc_url = 'https://api.coindesk.com/v1/bpi/historical/close.json'
 start_date = datetime.date(2018, 2, 6)  # go backwards because the iterator has most recent articles first
 end_date = datetime.date(2018, 1, 31)   # one week
 
@@ -56,8 +57,8 @@ def main():
     article_df = article_df.sort_values(by=['date'])
     article_df = article_df.reset_index(drop=True)
     
-    # extracting all the tweets from twitter about bitcoin from january 31 to february 6
-    tweet_tle.extract_text(bitcoin_tweets_path)
+    return article_df
+    
     
 if __name__ == '__main__':
     main()
