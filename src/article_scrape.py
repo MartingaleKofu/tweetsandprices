@@ -46,7 +46,6 @@ def crawl_articles(url):
     for link in soup.find_all('a', href=True, rel='bookmark'):
         if (link['title'] == link.get_text()):
             links.append(link['href'])
-    print(links)
     return links
 
 def find_date(url):
