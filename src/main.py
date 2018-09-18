@@ -10,6 +10,8 @@ import article_scrape
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import requests
+import nltk
 
 bitcoin_tweets_path = '../include/bitcoin_tweets.json'
 crawl_url = 'https://news.bitcoin.com/page/' 
@@ -26,9 +28,24 @@ def find_start_date(url, start, beg, end):
         return find_start_date(url, start, mid, end)
     else:
         return find_start_date(url, start, beg, mid)
+    
+def request_sentiment(text):
+    url = 'http://text-processing.com/api/sentiment/'
+    text = 'text='+text
+    r = requests.post(url, data=text)
+    return r.json()
 
 def main():
     # extracting all the text from news.bitcoin.com from january 31 to february 6
+    
+    """
+    d = {'col1':[1,2], 'col2':['great','goodbye']}
+    random_df = pd.DataFrame(data=d)
+    random_df['sentiment_score'] = random_df['col2'].apply(request_sentiment)
+    print(random_df)
+    return 0
+    """
+    
     links = set()
     # use divide and conquer to find the start date quicker because the list will always keep growing
     page_num = article_scrape.num_pages(crawl_url + str(1))
@@ -45,17 +62,26 @@ def main():
         start_page += 1
         content_date = article_scrape.find_date(crawl_url + str(start_page))
     
-    print(links)
     article_df = pd.DataFrame()
     links = list(links)
     for link in links:
         temp_df = article_scrape.scrape_article(link)
         article_df = pd.concat([article_df, temp_df], axis=0)
-    print(article_df)
     
     article_df = article_df[article_df['date'] <= start_date]
     article_df = article_df.sort_values(by=['date'])
     article_df = article_df.reset_index(drop=True)
+    # all articles in a dataframe sorted by date
+    # we can now perform sentiment analysis on each article to give it a score before we try to find correlation between sentiment and prices
+    
+    # strategy: we can perform sentiment analysis on each sentence of each article and average/sum up the sentiment scores before deciding the overall sentiment score
+    # of eah article
+    article_df['sentences'] = article_df['text'].apply(nltk.sent_tokenize)
+    print(article_df['sentences'])
+    return 0
+    article_df['json_information'] = article_df['text'].apply(request_sentiment) # first split the article into sentences using nltk.data
+    
+    print(article_df)
     
     return article_df
     
